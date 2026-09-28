@@ -1,0 +1,236 @@
+index.html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🎮 Hangman Game</h1>
+
+    <p class="hint">Hint: <span id="hintText"></span></p>
+
+    <div class="hangman" id="hangman">
+        <pre id="hangmanArt"></pre>
+    </div>
+
+    <div class="word" id="wordDisplay"></div>
+
+    <input type="text" id="letterInput" maxlength="1" placeholder="Enter letter">
+    <button onclick="guessLetter()">Guess</button>
+
+    <p class="message" id="message"></p>
+
+    <button class="restart" onclick="startGame()">Restart Game</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, blue,black);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #7f7c95;
+    padding: 25px 35px;
+    border-radius: 12px;
+    width: 600px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.hint {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.hangman pre {
+    font-size: 16px;
+    margin: 10px auto;
+}
+
+.word {
+    font-size: 24px;
+    letter-spacing: 6px;
+    margin: 15px 0;
+}
+
+input {
+    padding: 8px;
+    background:#a6acab;
+    width: 200px;
+    text-align: center;
+    font-size: 18px;
+}
+
+button {
+    padding: 8px 15px;
+    margin-left: 5px;
+    border: none;
+    background: cyan;
+    color: rgb(21, 18, 18);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background:cyan;
+    box-shadow: 0 0 5px cyan, 0 0 25px cyan, 0 0 50px cyan, 0 0 100px cyan;
+}
+
+.message {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.restart {
+    margin-top: 15px;
+    background: cyan;
+}
+
+.restart:hover {
+    background:cyan;
+    box-shadow: 0 0 5px cyan, 0 0 25px cyan, 0 0 50px cyan, 0 0 100px cyan;
+}
+
+
+script.js
+
+const words = [
+    { word: "elephant", hint: "A large mammal with a trunk" },
+    { word: "pizza", hint: "Popular Italian food" },
+    { word: "computer", hint: "Electronic device" },
+    { word: "beach", hint: "Sandy shore near sea" }
+];
+
+const hangmanStages = [
+``,
+`
+  |
+  |
+  |
+__|__`,
+`
+ ______
+  |
+  |
+  |
+__|__`,
+`
+ ______
+  |    O
+  |
+  |
+__|__`,
+`
+ ______
+  |    O
+  |   /|\\
+  |
+__|__`,
+`
+ ______
+  |    O
+  |   /|\\
+  |   / \\
+__|__`
+];
+
+let selectedWord = "";
+let hint = "";
+let guessedLetters = [];
+let wrongTries = 0;
+
+function startGame() {
+    const random = words[Math.floor(Math.random() * words.length)];
+    selectedWord = random.word;
+    hint = random.hint;
+
+    guessedLetters = [];
+    wrongTries = 0;
+
+    document.getElementById("hintText").innerText = hint;
+    document.getElementById("message").innerText = "";
+    document.getElementById("letterInput").value = "";
+
+    updateWord();
+    updateHangman();
+}
+
+function updateWord() {
+    let display = "";
+    for (let letter of selectedWord) {
+        display += guessedLetters.includes(letter) ? letter + " " : "_ ";
+    }
+    document.getElementById("wordDisplay").innerText = display.trim();
+}
+
+function updateHangman() {
+    document.getElementById("hangmanArt").innerText =
+        hangmanStages[wrongTries];
+}
+
+function guessLetter() {
+    const input = document.getElementById("letterInput");
+    let letter = input.value.toLowerCase();
+    input.value = "";
+
+    if (!letter.match(/[a-z]/)) {
+        showMessage("Enter a valid letter", "red");
+        return;
+    }
+
+    if (guessedLetters.includes(letter)) {
+        showMessage("Already guessed!", "orange");
+        return;
+    }
+
+    guessedLetters.push(letter);
+
+    if (!selectedWord.includes(letter)) {
+        wrongTries++;
+        updateHangman();
+    }
+
+    updateWord();
+    checkGameStatus();
+}
+
+function checkGameStatus() {
+    if (wrongTries === hangmanStages.length - 1) {
+        showMessage("❌ Game Over! Word: " + selectedWord, "red");
+    } else if (
+        selectedWord.split("").every(l => guessedLetters.includes(l))
+    ) {
+        showMessage("🎉 You Win!", "green");
+    }
+}
+
+function showMessage(msg, color) {
+    const message = document.getElementById("message");
+    message.innerText = msg;
+    message.style.color = color;
+}
+
+startGame();
+
+

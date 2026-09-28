@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Hangman Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🎮 Hangman</h1>
+
+    <div class="setup-area">
+        <input type="text" id="playerName" placeholder="Player Name">
+        <select id="difficulty">
+            <option value="easy">Easy (45s)</option>
+            <option value="medium">Medium (90s)</option>
+            <option value="hard">Hard (120s)</option>
+        </select>
+        <button onclick="startGame()" class="primary-btn">Start</button>
+    </div>
+
+    <div class="leaderboard-section">
+        <h3>🏆 Top Scores</h3>
+        <div class="leaderboard-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="game-box">
+        <div class="info-bar">
+            <span>💡 <span id="hint">Select difficulty</span></span>
+            <span class="timer">⏳ <span id="timer">0</span>s</span>
+        </div>
+
+        <pre id="hangman">
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========</pre>
+
+        <div class="word" id="word">H A N G M A N</div>
+
+        <div class="input-area">
+            <input type="text" id="letter" maxlength="1" placeholder="?">
+            <button onclick="guessLetter()" class="guess-btn">Guess</button>
+        </div>
+        
+        <p class="message" id="message"></p>
+    </div>
+
+    <button class="restart-btn" onclick="startGame()">Reset Game</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+/* General Reset */
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background:linear-gradient(blue, black);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevents global scrollbars */
+}
+
+/* Perfect Centered Container */
+.container {
+    background: rgba(255, 255, 255, 0.98);
+    width: 480px;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+h1 { margin: 0; color: #2d3436; font-size: 26px; }
+h3 { margin: 5px 0; font-size: 16px; color: #636e72; }
+
+/* Setup & Input Styling */
+.setup-area, .input-area {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+input, select {
+    padding: 8px;
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* Table Styling */
+.leaderboard-wrapper {
+    background: #f1f2f6;
+    border-radius: 10px;
+    max-height: 90px;
+    overflow-y: auto;
+    border: 1px solid #dfe6e9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th { background: #6c5ce7; color: white; padding: 4px; position: sticky; top: 0; }
+td { padding: 4px; border-bottom: 1px solid #ddd; }
+
+/* Hangman ASCII Box */
+#hangman {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.2;
+    background: #ffffff;
+    color: #000000;
+    padding: 15px;
+    border-radius: 12px;
+    display: inline-block;
+    margin: 10px auto;
+    white-space: pre;
+    text-align: left;
+    min-width: 130px;
+}
+
+.word {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin: 10px 0;
+    color: #2d3436;
+}
+
+/* Buttons */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.primary-btn { background: #6c5ce7; color: white; padding: 8px 15px; }
+.guess-btn { background: #00b894; color: white; padding: 8px 20px; }
+.restart-btn { background: #ff7675; color: white; padding: 6px; font-size: 12px; }
+button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.message { font-weight: bold; min-height: 20px; margin: 5px 0; }
+.timer { color: #d63031; font-weight: bold; }

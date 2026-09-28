@@ -1,0 +1,236 @@
+// =====================
+// HANGMAN WITH TIMER
+// =====================
+
+// Words & hints
+const words = [
+    { word: "elephant", hint: "A large animal with a trunk" },
+    { word: "pizza", hint: "Popular Italian food" },
+    { word: "computer", hint: "Electronic device" },
+    { word: "beach", hint: "Sandy place near the sea" }
+];
+
+// Hangman stages
+const hangmanStages = [
+``,
+`
+  |
+  |
+  |
+__|__`,
+`
+ ______
+  |
+  |
+  |
+__|__`,
+`
+ ______
+  |    O
+  |
+  |
+__|__`,
+`
+ ______
+  |    O
+  |   /|\\
+  |
+__|__`,
+`
+ ______
+  |    O
+  |   /|\\
+  |   / \\
+__|__`
+];
+
+// Game variables
+let selectedWord = "";
+let guessedLetters = [];
+let wrongGuesses = 0;
+
+// Timer variables
+let timeLeft = 30;
+let timerInterval;
+
+// =====================
+// START GAME
+// =====================
+function startGame() {
+    const random = words[Math.floor(Math.random() * words.length)];
+    selectedWord = random.word;
+    guessedLetters = [];
+    wrongGuesses = 0;
+
+    document.getElementById("hint").innerText = random.hint;
+    document.getElementById("message").innerText = "";
+    document.getElementById("letter").value = "";
+
+    updateWord();
+    updateHangman();
+    startTimer();
+}
+
+// =====================
+// TIMER
+// =====================
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 30;
+    document.getElementById("timer").innerText = timeLeft;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+
+        if (timeLeft === 0) {
+            clearInterval(timerInterval);
+            showMessage("⏰ Time Up! Game Over", "red");
+        }
+    }, 1000);
+}
+
+// =====================
+// UPDATE WORD
+// =====================
+function updateWord() {
+    let display = "";
+    for (let ch of selectedWord) {
+        display += guessedLetters.includes(ch) ? ch + " " : "_ ";
+    }
+    document.getElementById("word").innerText = display.trim();
+}
+
+// =====================
+// UPDATE HANGMAN
+// =====================
+function updateHangman() {
+    document.getElementById("hangman").innerText =
+        hangmanStages[wrongGuesses];
+}
+
+// =====================
+// GUESS LETTER
+// =====================
+function guessLetter() {
+    const input = document.getElementById("letter");
+    const letter = input.value.toLowerCase();
+    input.value = "";
+
+    if (!letter.match(/[a-z]/)) {
+        showMessage("Enter a valid letter", "red");
+        return;
+    }
+
+    if (guessedLetters.includes(letter)) {
+        showMessage("Already guessed!", "orange");
+        return;
+    }
+
+    guessedLetters.push(letter);
+
+    if (!selectedWord.includes(letter)) {
+        wrongGuesses++;
+        updateHangman();
+    }
+
+    updateWord();
+    checkGame();
+}
+
+// =====================
+// CHECK GAME STATUS
+// =====================
+function checkGame() {
+    if (wrongGuesses === hangmanStages.length - 1) {
+        clearInterval(timerInterval);
+        showMessage("❌ Game Over! Word: " + selectedWord, "red");
+    }
+    else if (selectedWord.split("").every(l => guessedLetters.includes(l))) {
+        clearInterval(timerInterval);
+        showMessage("🎉 You Won!", "green");
+    }
+}
+
+// =====================
+// MESSAGE
+// =====================
+function showMessage(msg, color) {
+    const m = document.getElementById("message");
+    m.innerText = msg;
+    m.style.color = color;
+}
+
+// =====================
+// INIT
+// =====================
+startGame();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman Game with Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🎮 Hangman</h1>
+    <div class="player-setup">
+    <input type="text" id="playerName" placeholder="Enter your name">
+    
+    <select id="difficulty">
+        <option value="easy">Easy (30s)</option>
+        <option value="medium">Medium (45s)</option>
+        <option value="hard">Hard (60s)</option>
+    </select>
+
+    <button onclick="startGame()">Start Game</button>
+</div>
+
+
+<h3>🏆 Leaderboard</h3>
+<ul id="leaderboard"></ul>
+
+
+    <p class="hint">Hint: <span id="hint"></span></p>
+
+    <div class="timer-box">
+        ⏳ Time Left: <span id="timer">30</span> sec
+    </div>
+
+    <pre id="hangman"></pre>
+
+    <div class="word" id="word"></div>
+
+    <input type="text" id="letter" maxlength="1" placeholder="Enter a Letter">
+    <button onclick="guessLetter()">Guess</button>
+
+    <p class="message" id="message"></p>
+
+    <button class="restart" onclick="startGame()">Restart</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
